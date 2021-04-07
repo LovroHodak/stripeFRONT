@@ -1,25 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+// CSS
+import "./App.css";
+// REACT
+import React from "react";
+import { withRouter } from "react-router-dom";
+
+// COMPONENTS
+import Home from "./components/Home";
+// CONTEXT
+import { MyProvider } from "./MyContext";
+import Cart from "./components/Cart";
+import UserData from "./components/UserData";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <MyProvider>
+      <div className="App">
+        <Home />
+        <Cart />
+        <UserData />
+      </div>
+    </MyProvider>
   );
 }
 
-export default App;
+export default withRouter(App);
