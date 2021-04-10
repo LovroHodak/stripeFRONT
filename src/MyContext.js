@@ -5,15 +5,16 @@ export const MyContext = createContext();
 
 export const MyProvider = (props) => {
   const [products, setProducts] = useState([]);
+  const [initial, setInitial] = useState([]);
+  const [cart, setCart] = useState([]);
 
   useEffect(() => {
-    console.log("i am beeing called");
 
     axios
       .get("http://localhost:5000/api/products", { withCredentials: true })
       .then((response) => {
         setProducts(response.data);
-        console.log(response.data);
+        setInitial(response.data);
       })
       .catch((err) => {
         console.log("this is error: ", err);
@@ -21,7 +22,6 @@ export const MyProvider = (props) => {
   }, []);
 
   const addToCart = (id) => {
-    console.log("connected", id);
 
     const newProducts = products.map((product) => {
       if (product._id === id) {
@@ -34,10 +34,33 @@ export const MyProvider = (props) => {
       return product;
     });
     setProducts(newProducts);
+
+    let cartItems = [];
+
+    initial.forEach((product) => {
+      newProducts.forEach((item) => {
+        if (
+          product._id === item._id &&
+          product.countInStock !== item.countInStock
+        ) {
+          cartItems.push({
+            _id: product._id,
+            id: product.id,
+            description: product.description,
+            imageUrl: product.imageUrl,
+            name: product.name,
+            price: product.price,
+            countInStock: product.countInStock - item.countInStock,
+          });
+        }
+      });
+    });
+
+    setCart(cartItems)
   };
 
   return (
-    <MyContext.Provider value={[products, setProducts, addToCart]}>
+    <MyContext.Provider value={[products, setProducts, addToCart, cart, setCart]}>
       {props.children}
     </MyContext.Provider>
   );
