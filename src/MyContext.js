@@ -9,7 +9,6 @@ export const MyProvider = (props) => {
   const [cart, setCart] = useState([]);
 
   useEffect(() => {
-
     axios
       .get("http://localhost:5000/api/products", { withCredentials: true })
       .then((response) => {
@@ -21,13 +20,57 @@ export const MyProvider = (props) => {
       });
   }, []);
 
-  const addToCart = (id) => {
-
+  const addToCart = (_id) => {
+    // update products (state)
     const newProducts = products.map((product) => {
-      if (product._id === id) {
+      if (product._id === _id && product.countInStock > 0) {
         const updateProduct = {
           ...product,
           countInStock: product.countInStock - 1,
+        };
+        return updateProduct;
+      }
+      return product;
+    });
+    setProducts(newProducts);
+
+    // update cart (state)
+    let cartItems = [];
+
+    initial.forEach((product) => {
+      newProducts.forEach((item) => {
+        if (
+          product._id === item._id &&
+          product.countInStock !== item.countInStock
+        ) {
+          cartItems.push({
+            _id: product._id,
+            id: product.id,
+            description: product.description,
+            imageUrl: product.imageUrl,
+            name: product.name,
+            price: product.price,
+            countInStock: product.countInStock - item.countInStock,
+          });
+
+        }
+      });
+    });
+
+    setCart(cartItems);
+
+  };
+
+  
+
+  const deleteFromCart = (_id) => {
+    
+
+    const newProducts = products.map((product) => {
+      if (product._id === _id) {
+        const updateProduct = {
+          ...product,
+          countInStock: product.countInStock + 1,
         };
         return updateProduct;
       }
@@ -56,11 +99,16 @@ export const MyProvider = (props) => {
       });
     });
 
-    setCart(cartItems)
+    setCart(cartItems);
   };
 
+
+  
+
   return (
-    <MyContext.Provider value={[products, setProducts, addToCart, cart, setCart]}>
+    <MyContext.Provider
+      value={[products, setProducts, addToCart, cart, setCart, deleteFromCart]}
+    >
       {props.children}
     </MyContext.Provider>
   );

@@ -7,26 +7,30 @@ export default function Cart() {
     MyContext
   );
 
-
   return (
     <div style={{ border: "2px solid red" }}>
       <h1>Cart</h1>
       {cart.length < 1 ? (
         <p>Your Cart is empty</p>
       ) : (
-        <div style={{display: 'flex', justifyContent: 'space-around'}}>
+        <div style={{ display: "flex", justifyContent: "space-around" }}>
           {cart.map((item, i) => {
             return (
               <div key={i}>
-                <p>{item.name}</p>
-                <p>{item.countInStock} x</p>
-                <p>{item.price} €</p>
+                <img
+                  src={item.imageUrl}
+                  alt="productImg"
+                  style={{ width: 100 }}
+                />
+                <p>Name: {item.name}</p>
+                <p>Items: {item.countInStock} x</p>
+                <p>Price per item: {item.price} €</p>
               </div>
             );
           })}
         </div>
       )}
-      <button>Order</button>
+      <button>Confirm</button>
     </div>
   );
 }
