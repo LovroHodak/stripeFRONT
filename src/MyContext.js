@@ -7,6 +7,7 @@ export const MyProvider = (props) => {
   const [products, setProducts] = useState([]);
   const [initial, setInitial] = useState([]);
   const [cart, setCart] = useState([]);
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
     axios
@@ -59,6 +60,12 @@ export const MyProvider = (props) => {
 
     setCart(cartItems);
 
+    var sum = cartItems.reduce((sum, p) => sum + p.price*p.countInStock, 0)
+
+    console.log(sum)
+    setTotal(sum);
+    
+
   };
 
   
@@ -100,6 +107,11 @@ export const MyProvider = (props) => {
     });
 
     setCart(cartItems);
+
+    var sum = cartItems.reduce((sum, p) => sum + p.price*p.countInStock, 0)
+
+    console.log(sum)
+    setTotal(sum);
   };
 
 
@@ -107,7 +119,7 @@ export const MyProvider = (props) => {
 
   return (
     <MyContext.Provider
-      value={[products, setProducts, addToCart, cart, setCart, deleteFromCart]}
+      value={[products, setProducts, addToCart, cart, setCart, deleteFromCart, total, setTotal]}
     >
       {props.children}
     </MyContext.Provider>
