@@ -8,6 +8,7 @@ export const MyProvider = (props) => {
   const [initial, setInitial] = useState([]);
   const [cart, setCart] = useState([]);
   const [total, setTotal] = useState(0);
+  const [soldHistory, setSoldHistory] = useState([])
 
   useEffect(() => {
     axios
@@ -119,7 +120,7 @@ export const MyProvider = (props) => {
 
   return (
     <MyContext.Provider
-      value={[products, setProducts, addToCart, cart, setCart, deleteFromCart, total, setTotal]}
+      value={[products, setProducts, addToCart, cart, setCart, deleteFromCart, total, setTotal, soldHistory, setSoldHistory, initial, setInitial]}
     >
       {props.children}
     </MyContext.Provider>
